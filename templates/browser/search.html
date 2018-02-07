@@ -1,0 +1,25 @@
+{% extends 'boilerplate.html' %}
+
+{% block body %}
+    <form action method="POST" class="container">
+        {% csrf_token %}
+        <br/>
+        <div class="input-field">
+            {#            co za kretyn projektował ten system szablonów #}
+            {#            flask + jinja2 + wtforms = <3 #}
+            {#            {{ form.text.label }}#}
+            {#                        {{ form.text }}#}
+            <input id="text" name="text" type="text" class="validate">
+            <label class="active" for="text">Wyszukaj</label>
+        </div>
+
+        {{ form.errors }}
+
+        <div class="center">
+            <button class="btn waves-effect indigo waves-light" type="submit" name="action">
+                Wyszukaj
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+    </form>
+{% endblock %}

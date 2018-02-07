@@ -1,19 +1,5 @@
 {% extends 'boilerplate.html' %}
 
-{% block navbar %}
-    {{ block.super }}
-    <nav class="deep-purple accent-2">
-        <div class="nav-wrapper container">
-            <div class="col s12">
-                <a href="{% url 'browser' %}" class="breadcrumb">Archiwum</a>
-                {% for curr in breadcrumbs %}
-                    <a href="{% url 'browser_path' path=curr.1 %}" class="breadcrumb">{{ curr.0 }}</a>
-                {% endfor %}
-            </div>
-        </div>
-    </nav>
-{% endblock %}
-
 {% block body %}
     <div class="container">
         <ul class="collection">
