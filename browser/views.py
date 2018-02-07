@@ -39,6 +39,7 @@ def list_files(request, path, dirs, files):
             } for f in files
         ]
     }
+    print(context['files'])
 
     return render(request, 'browser/browse.html', context)
 
@@ -74,7 +75,7 @@ def search(request):
         with open(settings.SEARCH_FILELIST, 'r') as file:
             for line in file:
                 if text in line:
-                    files.append(line)
+                    files.append(line.strip())
 
         files = sorted(
             files,
