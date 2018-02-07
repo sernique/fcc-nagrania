@@ -61,7 +61,7 @@ def browse(request, path=""):
     return list_files(request, path, dirs, files)
 
 
-def search(request, pattern=None):
+def search(request):
     form = SearchForm(request.POST)
 
     if request.POST and form.is_valid():
@@ -69,16 +69,16 @@ def search(request, pattern=None):
         path = parse_path(settings.BROWSEABLE_DIR)
         text = form.cleaned_data['text']
 
-        # foldery
-        # WARN: wyszukiwanie tymczasowo bez folderów
-        # dirs = sorted(
-        #     fs.finddirs('*%s*' % text, path, recursive=True),
-        #     key=str.lower
-        # )
-
         # pliki
+        files = []
+        with open(settings.SEARCH_FILELIST, 'r') as file:
+            for line in file:
+                if text in line:
+                    files.append(line)
+
         files = sorted(
-            fs.find('*%s*' % text, path, recursive=True),
+            files,
+            # fs.find('*%s*' % text, path, recursive=True),
             key=str.lower
         )
 

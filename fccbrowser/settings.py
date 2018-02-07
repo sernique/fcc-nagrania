@@ -14,6 +14,7 @@ import os
 
 # Ustawienia aplikacji
 BROWSEABLE_DIR = '/Users/mpianka/'
+SEARCH_FILELIST = '/Users/mpianka/lista.txt'
 SOUND_EXTENSIONS = ('mp3', 'wav')
 ALLOWED_IPS = [
     '127.0.0.1',
