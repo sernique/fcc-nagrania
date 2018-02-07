@@ -1,0 +1,38 @@
+{% extends 'boilerplate.html' %}
+
+{% block navbar %}
+    {{ block.super }}
+    <nav class="deep-purple accent-2">
+        <div class="nav-wrapper container">
+            <div class="col s12">
+                <a href="{% url 'browser' %}" class="breadcrumb">Archiwum</a>
+                {% for curr in breadcrumbs %}
+                    <a href="{% url 'browser_path' path=curr.1 %}" class="breadcrumb">{{ curr.0 }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </nav>
+{% endblock %}
+
+{% block body %}
+    <br/><br/>
+    <div class="row">
+        <div class="container">
+            <div class="card indigo darken-1">
+                <div class="card-content white-text">
+                    <span class="card-title">{{ name }}</span>
+                    <br/>
+                    <p>
+                        <audio controls style="width: 100%">
+                            <source src="{% url 'stream_file' path=path %}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    </p>
+                </div>
+                <div class="card-action">
+                    <a href="{% url 'get_file' path=path %}" class="indigo-text text-accent-1">Pobierz</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
