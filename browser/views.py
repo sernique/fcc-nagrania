@@ -68,11 +68,13 @@ def search(request, pattern=None):
         # ścieżka domyślna
         path = parse_path(settings.BROWSEABLE_DIR)
         text = form.cleaned_data['text']
+
         # foldery
-        dirs = sorted(
-            fs.finddirs('*%s*' % text, path, recursive=True),
-            key=str.lower
-        )
+        # WARN: wyszukiwanie tymczasowo bez folderów
+        # dirs = sorted(
+        #     fs.finddirs('*%s*' % text, path, recursive=True),
+        #     key=str.lower
+        # )
 
         # pliki
         files = sorted(
@@ -80,7 +82,7 @@ def search(request, pattern=None):
             key=str.lower
         )
 
-        return list_files(request, '', dirs, files)
+        return list_files(request, '', [], files)
     else:
         return render(
             request,
