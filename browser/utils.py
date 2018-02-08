@@ -1,6 +1,16 @@
 import os
 
 from django.conf import settings
+from django.http import HttpResponse
+from django.utils.deprecation import MiddlewareMixin
+
+
+class IpWhitelistMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        ip = request.META['REMOTE_ADDR']
+
+        if ip not in settings.ALLOWED_IPS:
+            return HttpResponse("403: Brak dostępu")
 
 
 def parse_path(path: str):
