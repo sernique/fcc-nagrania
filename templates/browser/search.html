@@ -13,7 +13,9 @@
             <label class="active" for="text">Wyszukaj</label>
         </div>
 
-        {{ form.errors }}
+        {% if form.errors %}
+            <span class="red-text text-darken-4">Uzupełnij pole</span>
+        {% endif %}
 
         <div class="center">
             <button class="btn waves-effect indigo waves-light" type="submit" name="action">
