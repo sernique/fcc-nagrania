@@ -1,3 +1,4 @@
+import logging
 import os
 from wsgiref.util import FileWrapper
 
@@ -7,7 +8,9 @@ from django.http import Http404, StreamingHttpResponse, HttpResponse
 from django.shortcuts import render, redirect
 
 from .forms import SearchForm
-from .utils import render_path, split_path_for_breadcrumbs, parse_path
+from .utils import render_path, split_path_for_breadcrumbs, parse_path, get_client_ip
+
+logger = logging.getLogger('django')
 
 
 def list_files(request, path, dirs, files):
@@ -39,7 +42,6 @@ def list_files(request, path, dirs, files):
             } for f in files
         ]
     }
-    print(context['files'])
 
     return render(request, 'browser/browse.html', context)
 
@@ -70,6 +72,8 @@ def search(request):
         path = parse_path(settings.BROWSEABLE_DIR)
         text = form.cleaned_data['text']
 
+        logger.info('%s wyszukał "%s"' % (get_client_ip(request), text))
+
         # pliki
         files = []
         with open(settings.SEARCH_FILELIST, 'r') as file:
@@ -88,7 +92,7 @@ def search(request):
         return render(
             request,
             'browser/search.html',
-            context={'form': form}
+            context={'form': form, 'breadcrumbs': None}
         )
 
 
@@ -123,12 +127,14 @@ def get_file(request, path, stream=False):
     fullpath = parse_path(path)
 
     if stream:
+        logger.info('%s streamował "%s"' % (get_client_ip(request), os.path.basename(fullpath)))
         # zwraca stream audio/mpeg
         response = StreamingHttpResponse(
             FileWrapper(open(fullpath, 'rb'), 8192),
             content_type="audio/mpeg"
         )
     else:
+        logger.info('%s pobrał "%s"' % (get_client_ip(request), os.path.basename(fullpath)))
         # zwraca plik do pobrania
         response = HttpResponse(
             open(fullpath, 'rb'), content_type='application/force-download'

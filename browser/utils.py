@@ -38,6 +38,9 @@ def split_path_for_breadcrumbs(path: str):
     :param path: ścieżka
     :return: tuple(nazwa folderu, ścieżka)
     """
+    if path is None:
+        return None
+
     result = []
     fullpath = ""
     for curr in path.split('/'):
@@ -52,3 +55,12 @@ def split_path_for_breadcrumbs(path: str):
                 )
 
     return result
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
