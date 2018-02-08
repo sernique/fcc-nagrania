@@ -49,15 +49,23 @@ def list_files(request, path, dirs, files):
 def browse(request, path=""):
     fullpath = parse_path(path)
 
-    # utwórz posortowaną alfabetycznie listę folderów
+    try:
+        # spróbuj pobrać listę plików
+        items = [os.path.join(fullpath, item) for item in os.listdir(fullpath)]
+    except NotADirectoryError:
+        if not fs.isdir(parse_path(path)):
+            # jeśli folder jest plikiem, przejdź do widoku pliku
+            return redirect('show', path=path)
+
+    # przefiltruj listę folderów i posortuj alfabetycznie
     dirs = sorted(
-        fs.listdirs(fullpath),
+        list(filter(lambda d: os.path.isdir(d), items)),
         key=str.lower
     )
 
-    # utwórz posortowaną alfabetycznie listę plików
+    # przefiltruj listę plików i posortuj alfabetycznie
     files = sorted(
-        fs.list(fullpath),
+        list(filter(lambda d: os.path.isfile(d), items)),
         key=str.lower
     )
 
